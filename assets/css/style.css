@@ -1,0 +1,133 @@
+body {
+    min-width: 980px;
+}
+.title > h2 {
+    margin-top: 10px;
+}
+.mslogo {
+    width: 80px;
+    height: 80px;
+}
+.announcementBanner {
+    margin-bottom: 10px;
+}
+/* character selection: box css and hover */
+.imgCharBox {
+    width: 150px;
+    height: 160px;
+    -webkit-transition: all 0.30s ease-in-out;
+    -moz-transition: all 0.30s ease-in-out;
+    -ms-transition: all 0.30s ease-in-out;
+    -o-transition: all 0.30s ease-in-out;
+    box-shadow: 0 0 5px black;
+    padding: 5px 0px 5px 5px;
+    margin: 7px 3px 5px 0px;
+    background-size: cover;
+    position: relative;
+}
+
+.imgCharBox:hover {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    border: 1px solid rgba(81, 203, 238, 1);
+}
+
+/* Bowman animation during character select */
+.imgCharBowman {
+    background-image: url("../images/characters/bowman/stand1_0.png");
+}
+
+.imgCharBowman:hover {
+    -webkit-animation-name: bowman; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: .8s; /* Safari 4.0 - 8.0 */
+    animation-name: bowman;
+    animation-duration: .8s;
+}
+
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes bowman {
+    from {background-image: url("../images/characters/bowman/shootF_0.png");}
+    to {background-image: url("../images/characters/bowman/shootF_1.png");}
+}
+
+/* Standard syntax */
+@keyframes bowman {
+    from {background-image: url("../images/characters/bowman/shootF_0.png");}
+    to {background-image: url("../images/characters/bowman/shootF_1.png");}
+}
+/* end bowman */
+/* Magician animation during character select */
+.imgCharMagician {
+    background-image: url("../images/characters/magician/stand1_0.png");
+}
+
+.imgCharMagician:hover {
+    -webkit-animation-name: magician; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: .8s; /* Safari 4.0 - 8.0 */
+    animation-name: magician;
+    animation-duration: .8s;
+}
+
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes magician {
+    from {background-image: url("../images/characters/magician/swingO3_2.png");}
+    to {background-image: url("../images/characters/magician/swingO3_0.png");}
+}
+
+/* Standard syntax */
+@keyframes magician {
+    from {background-image: url("../images/characters/magician/swingO3_2.png");}
+    to {background-image: url("../images/characters/magician/swingO3_0.png");}
+}
+/* end magician */
+/* Thief animation during character select */
+.imgCharThief {
+    background-image: url("../images/characters/thief/stand1_0.png");
+}
+
+.imgCharThief:hover {
+    -webkit-animation-name: thief; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: .8s; /* Safari 4.0 - 8.0 */
+    animation-name: thief;
+    animation-duration: .8s;
+}
+
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes thief {
+    25% {background-image: url("../images/characters/thief/swingO2_0.png");}
+    40% {background-image: url("../images/characters/thief/swingO2_1.png");}
+    75% {background-image: url("../images/characters/thief/swingO2_2.png");}
+}
+
+/* Standard syntax */
+@keyframes theif {
+    25% {background-image: url("../images/characters/thief/swingO2_0.png");}
+    40% {background-image: url("../images/characters/thief/swingO2_1.png");}
+    75% {background-image: url("../images/characters/thief/swingO2_2.png");}
+}
+/* end thief */
+/* Thief animation during character select */
+.imgCharWarrior {
+    background-image: url("../images/characters/warrior/stand1_1.png");
+}
+
+.imgCharWarrior:hover {
+    -webkit-animation-name: warrior; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 1.8s; /* Safari 4.0 - 8.0 */
+    animation-name: warrior;
+    animation-duration: 1.8s;
+}
+
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes warrior {
+    25% {background-image: url("../images/characters/warrior/swingO1_0.png");}
+    35% {background-image: url("../images/characters/warrior/swingO1_1.png");}
+    55% {background-image: url("../images/characters/warrior/swingO1_2.png");}
+}
+
+/* Standard syntax */
+@keyframes warrior {
+    25% {background-image: url("../images/characters/warrior/swingO1_0.png");}
+    35% {background-image: url("../images/characters/warrior/swingO1_1.png");}
+    55% {background-image: url("../images/characters/warrior/swingO1_2.png");}
+}
+/* end thief */
