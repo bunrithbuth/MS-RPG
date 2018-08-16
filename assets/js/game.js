@@ -3,24 +3,28 @@ let Bowman = {
     health: 70,
     attack: 20,
     counter: 4,
+    attackRaised: 5
 }
 
 let Magician = {
     health: 80,
     attack: 16,
-    counter: 5
+    counter: 5,
+    attackRaised: 5
 }
 
 let Thief = {
     health: 90,
     attack: 16,
-    counter: 5
+    counter: 10,
+    attackRaised: 2
 }
 
 let Warrior = {
     health: 100,
     attack: 15,
-    counter: 4
+    counter: 4,
+    attackRaised: 5
 }
 
 
@@ -60,14 +64,27 @@ $(".health-bar").click(function(){
 /** start game */
 let MS_RPG = {
     gameEnd: 0,
-    characterSelected: "none",
+
+    charSelected: "none",
     charStats: "none",
     charCurrentHealth: 0,
 
+    maxEnemyCount: enemyCount,
     currEnemyCount: 0,
+
+    defSelected: "none",
     defStats: "none",
     defCurrentHeath: 0,
+
     phase: 0,
+    // phase 0 = choose character
+    // phase 1 = choose defender
+    // phase 2 = battle defender
+    // repeat phase 1 and 2 until no defender or player is dead
+
+    /** FUNCTIONS */
+
+    // displays character infos
     selectCharacterScreen: function () {
         this.updateAnnouncement('Select a Character')
 
@@ -109,6 +126,7 @@ let MS_RPG = {
                     <h5>${'HP: ' + Warrior.health}</h5>
                     <h5>${'ATK: ' + Warrior.attack}</h5>
                     <h5>${'CATK: ' + Warrior.counter}</h5>
+                    <h5>${'RATK: ' + Warrior.attackRaised}</h5>
                     </div>`)
                     break
                 case 'Bowman':
@@ -116,6 +134,7 @@ let MS_RPG = {
                     <h5>${'HP: ' + Bowman.health}</h5>
                     <h5>${'ATK: ' + Bowman.attack}</h5>
                     <h5>${'CATK: ' + Bowman.counter}</h5>
+                    <h5>${'RATK: ' + Bowman.attackRaised}</h5>
                     </div>`)
                     break
                 case 'Magician':
@@ -123,6 +142,7 @@ let MS_RPG = {
                     <h5>${'HP: ' + Magician.health}</h5>
                     <h5>${'ATK: ' + Magician.attack}</h5>
                     <h5>${'CATK: ' + Magician.counter}</h5>
+                    <h5>${'RATK: ' + Magician.attackRaised}</h5>
                     </div>`)
                     break
                 case 'Thief':
@@ -130,37 +150,52 @@ let MS_RPG = {
                     <h5>${'HP: ' + Thief.health}</h5>
                     <h5>${'ATK: ' + Thief.attack}</h5>
                     <h5>${'CATK: ' + Thief.counter}</h5>
+                    <h5>${'RATK: ' + Thief.attackRaised}</h5>
                     </div>`)
                     break
             }
         }
+        /** CAN CLICK ON CHAR HERE */
+        $(document).ready(function() {
+            $('.imgCharBox').on("click", function() {
+                if (MS_RPG.phase === 0) {
+                    //choose character
+                    console.log($(this).attr("data"))
+                    MS_RPG.selectedCharacter($(this).attr("data"))
+                }
+            })
+        })
+        /** END */
     },
-    selectCharacter(str){
+    // updates RPG with character selected
+    selectedCharacter: function (str) {
+        this.phase++ //phase 1
         this.updateAnnouncement('You Haven Chosen ' + str)
         switch (str) {
             case 'Warrior':
-                this.characterSelected = 'Warrior'
-                this.stats = Warrior
+                this.charSelected = 'Warrior'
+                this.charStats = Warrior
                 break
             case 'Bowman':
-                this.characterSelected = 'Bowman'
-                this.stats = Bowman
+                this.charSelected = 'Bowman'
+                this.charStats = Bowman
                 break
             case 'Magician':
-                this.characterSelected = 'Magician'
-                this. stats = Magician
+                this.charSelected = 'Magician'
+                this.charStats = Magician
                 break
             case 'Thief':
-                this.characterSelected = 'Thief'
-                this.stats = Thief
+                this.charSelected = 'Thief'
+                this.charStats = Thief
                 break
         }
-        $('.gameScreen').empty()
-        this.currEnemyCount = enemyCount
-        this.battleScreen()
-        
+        this.selectDefenderScreen()       
     },
-    battleScreen(){
+    // counts & displays monsters 
+    selectDefenderScreen: function () {
+        $('.gameScreen').empty()
+        this.currEnemyCount = this.maxEnemyCount
+
         /* [you]_[defender]_[d1][d2][d3] */
         for (let i =0; i < 5; i++) {
             if(i === 0){
@@ -181,40 +216,128 @@ let MS_RPG = {
             }
         }
 
-        for (let i =0; i < 5; i++) {
+        for (let i =0; i < 4; i++) {
             if(i === 0){
                 $('.gameScreen').append(`<div class="col s2">
-                <div class="imgCharBox ${'imgChar'+this.characterSelected} flip" data="${this.characterSelected}"></div>
+                <div class="imgCharBox ${'imgChar'+this.charSelected} flip" data="${this.charSelected}"></div>
                 </div>`)
             }else if(i === 1 || i === 3){
-                $('.gameScreen').append(`<div class="col s1">
+                $('.gameScreen').append(`<div class="col s1 spacer">
                 </div>`)
-            }else if(i === 2 || i == 4){
-                $('.gameScreen').append(`<div class="col s1">
+            }else if(i === 2){
+                $('.gameScreen').append(`<div class="col s2 defender">
                 </div>`)
             }
         }
         for (let i =0; i < enemyCount; i++) {
-            $('.gameScreen').append(`<div class="col s2">
+            $('.gameScreen').append(`<div class="col s2 nextOpponent ${enemyOptions[i]}">
             <div class="imgMonBox imgCharBorder ${'imgMon'+enemyOptions[i]}" data="${enemyOptions[i]}"></div>
             </div>`) 
         }
 
+        // creates character health bar and character stats
         $('.gameScreen').append(`
-        <div class="col s2 center">
-            <div class="health-bar">
-                <div class="health-bar-glass">
-                    <div class="health-bar-fluid" data="${this.characterSelected}"></div>
+        <div class="col s12 rowHealthbar">
+            <div class="col s2 center">
+                <div class="health-bar">
+                    <div class="health-bar-glass">
+                        <div class="health-bar-fluid" data="${this.charSelected}"></div>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="col s12 rowStats">
+            <div class="col s2 charStats"></div>
+            <div class="col s1 spacer"></div>
+            <div class="col s2 defStats"></div>
+        </div>
         `)
-    },
-    selectDefender(){
+        this.updateCharStats()
 
+        this.updateAnnouncement('Select a Monster to Attack')
+        this.selectDefenderLoop()
+    },
+    // on click for nextOpponent 
+    selectDefenderLoop: function () {
+        /** CAN CLICK ON MONSTERS TO BE DEFENDER */
+        $(document).ready(function() {     
+            $('.imgMonBox').on("click", function() {
+                if (MS_RPG.phase === 1) {
+                    //choose Defender
+                    console.log($(this).attr("data"))
+                    MS_RPG.selectedDefenderScreen($(this).attr("data"))
+                }
+            })  
+        })
+    },
+    // updates defender stats 
+    selectedDefenderScreen: function (str) {
+        //updates phase to 2
+        this.phase++
+
+        //removes selected monster and puts it on defender area
+        $(`.imgMon${str}`).clone().appendTo('.defender')
+        $(`.nextOpponent.${str}`).remove()
+
+        //updates current defender
+        switch (str) {
+            case 'Lupin':
+                this.defSelected = 'Lupin'
+                this.defStats = Lupin
+                break
+            case 'Drake':
+                this.defSelected = 'Drake'
+                this.defStats = Drake
+                break
+            case 'Balrog':
+                this.defSelected = 'Balrog'
+                this.defStats = Balrog
+                break
+        }
+
+        // adds hp bar for defender if it hasnt been added aka curr = max enemies
+        if(this.currEnemyCount === this.maxEnemyCount){
+            $('.rowHealthbar').append(`
+                <div class="col s1 spacer"></div>
+                <div class="col s2 center">
+                    <div class="health-bar">
+                        <div class="health-bar-glass">
+                            <div class="health-bar-fluid" data="${this.charSelected}"></div>
+                        </div>
+                    </div>
+                </div>
+            `)
+        }
+
+        // adds the defender stats
+        this.updateDefStats()
+
+        //removes border around next opponent area
+        $(`.nextOpponent .imgCharBorder`).removeClass('imgCharBorder')
+
+        //trigger fighting between char and defender
+        this.fightDefenderScreen(str)
+    },
+    // fights and goes back into selectDefenderLoop if monster available or not dead yet
+    fightDefenderScreen: function (str){
+        this.updateAnnouncement(`Click on the ${str} to Attack`)
     },
     updateAnnouncement: function (str) {
         $('.announcementBanner').html(`<h4>${str}</h4>`)
+    },
+    updateCharStats: function () {
+        $('.charStats').html(`
+            <h5>${'HP: ' + this.charStats.health}</h5>
+            <h5>${'ATK: ' + this.charStats.attack}</h5>
+            <h5>${'CATK: ' + this.charStats.counter}</h5>
+            <h5>${'RATK: ' + this.charStats.attackRaised}</h5>
+        `)
+    },
+    updateDefStats: function () {
+        $('.defStats').html(`
+            <h5>${'HP: ' + this.defStats.health}</h5>
+            <h5>${'CATK: ' + this.defStats.counter}</h5>
+        `)
     },
     runRPG: function () {
         this.selectCharacterScreen()
@@ -222,23 +345,5 @@ let MS_RPG = {
 }
 
 $(document).ready(function() {
-
     MS_RPG.runRPG()
-
-    $('.imgCharBox').on("click", function( event ) {
-        if (MS_RPG.phase === 0) {
-            //choose character
-            MS_RPG.selectCharacter($(this).attr("data"))
-        }
-    })
-
-    $('.imgCharBox').on("click", function( event ) {
-        if (MS_RPG.phase === 1) {
-            //choose Defender
-            console.log($(this).attr("data"))
-        } else if (MS_RPG.phase === 2) {
-            //attack Defender
-        }
-    })
-
 })
