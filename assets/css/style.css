@@ -1,3 +1,6 @@
+.cursorSword {
+    cursor: crosshair;
+}
 /** start health bar **/
 .health-bar
 {
@@ -86,11 +89,11 @@ body {
     background-image: url("../images/characters/bowman/stand1_0.png");
 }
 
-.activeBowman:hover {
+.activeBowman:hover, .attackBowman {
     -webkit-animation-name: bowman; /* Safari 4.0 - 8.0 */
-    -webkit-animation-duration: .8s; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: .5s; /* Safari 4.0 - 8.0 */
     animation-name: bowman;
-    animation-duration: .8s;
+    animation-duration: .5s;
 }
 
 /* Safari 4.0 - 8.0 */
@@ -110,11 +113,11 @@ body {
     background-image: url("../images/characters/magician/stand1_0.png");
 }
 
-.activeMagician:hover {
+.activeMagician:hover, .attackMagician {
     -webkit-animation-name: magician; /* Safari 4.0 - 8.0 */
-    -webkit-animation-duration: .8s; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: .5s; /* Safari 4.0 - 8.0 */
     animation-name: magician;
-    animation-duration: .8s;
+    animation-duration: .5s;
 }
 
 /* Safari 4.0 - 8.0 */
@@ -134,11 +137,11 @@ body {
     background-image: url("../images/characters/thief/stand1_0.png");
 }
 
-.activeThief:hover {
+.activeThief:hover, .attackThief {
     -webkit-animation-name: thief; /* Safari 4.0 - 8.0 */
-    -webkit-animation-duration: .8s; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: .5s; /* Safari 4.0 - 8.0 */
     animation-name: thief;
-    animation-duration: .8s;
+    animation-duration: .5s;
 }
 
 /* Safari 4.0 - 8.0 */
@@ -160,11 +163,11 @@ body {
     background-image: url("../images/characters/warrior/stand1_1.png");
 }
 
-.activeWarrior:hover {
+.activeWarrior:hover, .attackWarrior {
     -webkit-animation-name: warrior; /* Safari 4.0 - 8.0 */
-    -webkit-animation-duration: 1.8s; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: .5s; /* Safari 4.0 - 8.0 */
     animation-name: warrior;
-    animation-duration: 1.8s;
+    animation-duration: .5s;
 }
 
 /* Safari 4.0 - 8.0 */
