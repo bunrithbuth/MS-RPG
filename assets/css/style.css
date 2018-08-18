@@ -1,5 +1,45 @@
+.col {
+    padding: 0px !important;
+}
+/** start health bar **/
+.health-bar
+{
+    position: relative;    
+    display: inline-block;    
+    margin: 6px 0;
+    width: 100%;
+}
+
+.health-bar-glass
+{
+    display: inline-block;
+    width: 100%;
+    height: 16px;   
+    z-index: 10;    
+    border: 2px solid #000000;
+    box-shadow: inset 0 0 0 2px #dbd75d;
+}
+
+.defModel .health-bar-glass
+{
+    width: 140px;
+}
+
+.health-bar-fluid
+{
+    width: 100%;
+    height: 100%;
+    background: #d34549;
+    box-shadow: inset 0 3px 0 -1px #d3aa9a, 
+        inset 0 -4px 0 -2px #4d494d, 
+        inset 4px 0 0 -2px #4d494d, 
+        inset -4px 0 0 -2px #4d494d;
+}
+/** end health bar **/
+
+
 body {
-    min-width: 980px;
+    min-width: 1366px;
 }
 .title > h2 {
     margin-top: 10px;
@@ -15,6 +55,20 @@ body {
 .imgCharBox {
     width: 150px;
     height: 160px;
+    background-size: cover;
+    position: relative;
+}
+
+.imgMonBox {
+    width: 140px;
+    height: 160px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom center; 
+    position: relative;
+}
+
+.imgCharBorder {
     -webkit-transition: all 0.30s ease-in-out;
     -moz-transition: all 0.30s ease-in-out;
     -ms-transition: all 0.30s ease-in-out;
@@ -22,11 +76,19 @@ body {
     box-shadow: 0 0 5px black;
     padding: 5px 0px 5px 5px;
     margin: 7px 3px 5px 0px;
-    background-size: cover;
-    position: relative;
 }
 
-.imgCharBox:hover {
+.defenderModel {
+    min-height: 160px !important;
+}
+
+/* face image the other way */
+.flip {
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+}
+
+.imgCharBorder:hover {
     box-shadow: 0 0 5px rgba(81, 203, 238, 1);
     border: 1px solid rgba(81, 203, 238, 1);
 }
@@ -36,11 +98,11 @@ body {
     background-image: url("../images/characters/bowman/stand1_0.png");
 }
 
-.imgCharBowman:hover {
+.activeBowman:hover, .attackBowman {
     -webkit-animation-name: bowman; /* Safari 4.0 - 8.0 */
-    -webkit-animation-duration: .8s; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: .5s; /* Safari 4.0 - 8.0 */
     animation-name: bowman;
-    animation-duration: .8s;
+    animation-duration: .5s;
 }
 
 /* Safari 4.0 - 8.0 */
@@ -60,23 +122,23 @@ body {
     background-image: url("../images/characters/magician/stand1_0.png");
 }
 
-.imgCharMagician:hover {
+.activeMagician:hover, .attackMagician {
     -webkit-animation-name: magician; /* Safari 4.0 - 8.0 */
-    -webkit-animation-duration: .8s; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: .5s; /* Safari 4.0 - 8.0 */
     animation-name: magician;
-    animation-duration: .8s;
+    animation-duration: .5s;
 }
 
 /* Safari 4.0 - 8.0 */
 @-webkit-keyframes magician {
-    from {background-image: url("../images/characters/magician/swingO3_2.png");}
-    to {background-image: url("../images/characters/magician/swingO3_0.png");}
+    20% {background-image: url("../images/characters/magician/swingO3_2.png");}
+    50% {background-image: url("../images/characters/magician/swingO3_0.png");}
 }
 
 /* Standard syntax */
 @keyframes magician {
-    from {background-image: url("../images/characters/magician/swingO3_2.png");}
-    to {background-image: url("../images/characters/magician/swingO3_0.png");}
+    25% {background-image: url("../images/characters/magician/swingO3_2.png");}
+    50% {background-image: url("../images/characters/magician/swingO3_0.png");}
 }
 /* end magician */
 /* Thief animation during character select */
@@ -84,11 +146,11 @@ body {
     background-image: url("../images/characters/thief/stand1_0.png");
 }
 
-.imgCharThief:hover {
+.activeThief:hover, .attackThief {
     -webkit-animation-name: thief; /* Safari 4.0 - 8.0 */
-    -webkit-animation-duration: .8s; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: .5s; /* Safari 4.0 - 8.0 */
     animation-name: thief;
-    animation-duration: .8s;
+    animation-duration: .5s;
 }
 
 /* Safari 4.0 - 8.0 */
@@ -99,10 +161,10 @@ body {
 }
 
 /* Standard syntax */
-@keyframes theif {
+@keyframes thief {
     25% {background-image: url("../images/characters/thief/swingO2_0.png");}
-    40% {background-image: url("../images/characters/thief/swingO2_1.png");}
-    75% {background-image: url("../images/characters/thief/swingO2_2.png");}
+    35% {background-image: url("../images/characters/thief/swingO2_1.png");}
+    50% {background-image: url("../images/characters/thief/swingO2_2.png");}
 }
 /* end thief */
 /* Thief animation during character select */
@@ -110,24 +172,46 @@ body {
     background-image: url("../images/characters/warrior/stand1_1.png");
 }
 
-.imgCharWarrior:hover {
+.activeWarrior:hover, .attackWarrior {
     -webkit-animation-name: warrior; /* Safari 4.0 - 8.0 */
-    -webkit-animation-duration: 1.8s; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: .5s; /* Safari 4.0 - 8.0 */
     animation-name: warrior;
-    animation-duration: 1.8s;
+    animation-duration: .5s;
 }
 
 /* Safari 4.0 - 8.0 */
 @-webkit-keyframes warrior {
     25% {background-image: url("../images/characters/warrior/swingO1_0.png");}
     35% {background-image: url("../images/characters/warrior/swingO1_1.png");}
-    55% {background-image: url("../images/characters/warrior/swingO1_2.png");}
+    50% {background-image: url("../images/characters/warrior/swingO1_2.png");}
 }
 
 /* Standard syntax */
 @keyframes warrior {
     25% {background-image: url("../images/characters/warrior/swingO1_0.png");}
     35% {background-image: url("../images/characters/warrior/swingO1_1.png");}
-    55% {background-image: url("../images/characters/warrior/swingO1_2.png");}
+    50% {background-image: url("../images/characters/warrior/swingO1_2.png");}
 }
 /* end thief */
+
+/** MONSTERS **/
+/* balrog */
+.imgMonBalrog {
+    background-image: url("../images/monsters/Balrog.png");
+}
+/* snail */
+.imgMonSnail {
+    background-image: url("../images/monsters/rSnail.png");
+}
+/* bsnail */
+.imgMonbSnail {
+    background-image: url("../images/monsters/bSnail.png");
+}
+/* drake */
+.imgMonDrake {
+    background-image: url("../images/monsters/Drake.png");
+}
+/* drake */
+.imgMonLupin {
+    background-image: url("../images/monsters/Lupin.png");
+}
