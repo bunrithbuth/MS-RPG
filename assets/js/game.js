@@ -32,7 +32,7 @@ let Warrior = {
 let characterOptions = ['Warrior', 'Bowman', 'Magician', 'Thief']
 
 //monsters
-let enemyOptions = ['Lupin','Drake','Balrog']
+let enemyOptions = ['Lupin','Drake','Balrog','Snail', 'bSnail']
 let enemyCount = enemyOptions.length
 
 let Lupin =  {
@@ -50,6 +50,15 @@ let Balrog = {
     counter: 10
 }
 
+let rSnail = {
+    health: 20,
+    counter: 1
+}
+
+let bSnail = {
+    health: 15,
+    counter: 1
+}
 
 /** 
 let currentHealth = 100;
@@ -239,29 +248,44 @@ let MS_RPG = {
          */
         $('.gameScreen').append(`<div class="col s12 gameModels">
         </div>`)
+        /**
+         * .gameScreen
+         * >> .gameNames
+         * >> .gameModels
+         * >> >> [.charModel][.spacerModel][.defModel][.spacerModel][.nextOpponentsModel]
+         */
+        $('.gameModels').append(`<div class="col s2 charModel">
+        </div>`)
+        $('.gameModels').append(`<div class="col s1 spaceModel">
+        </div>`)
+        $('.gameModels').append(`<div class="col s2 defModel">
+        </div>`)
+        $('.gameModels').append(`<div class="col s1 spaceModel">
+        </div>`)
+        $('.gameModels').append(`<div class="col s6 nextOpponentsModel">
+        </div>`)
 
         /**
          * .gameScreen
          * >> .gameNames
          * >> >> [YOU][SPACER][DEFENDER][SPACER][NEXT OPPONENTS AREA]
          * >> .gameModels
-         * >> >> [YOU][SPACER][[EMPTY<emptyatm>]][SPACER][[MON1][MON2][MON3]]
+         * >> >> [.charModel][.spacerModel][.defModel][.spacerModel][.nextOpponentsModel]
+         * >> >> [YOU]                    [EMPTY<emptyatm>]         [[MON1][MON2][MON3]..]
          */
-        for (let i =0; i < 4; i++) {
-            if(i === 0){
-                $('.gameModels').append(`<div class="col s2">
-                <div class="imgCharBox ${'imgChar'+this.charSelected} flip" data="${this.charSelected}"></div>
-                </div>`)
-            }else if(i === 1 || i === 3){
-                $('.gameModels').append(`<div class="col s1 spacer">
-                </div>`)
-            }else if(i === 2){
-                $('.gameModels').append(`<div class="col s2 defenderModel">
-                </div>`)
-            }
-        }
+
+        //[YOU]
+        $('.charModel').append(`<div class="col s12 center">
+        <div class="imgCharBox ${'imgChar'+this.charSelected} flip" data="${this.charSelected}"></div>
+        </div>`)
+
+        //[defModel]
+        $('.defModel').append(`<div class="col s12 center defenderModel">
+        </div>`)
+            
+        //nextOpponentsModel
         for (let i =0; i < enemyCount; i++) {
-            $('.gameModels').append(`<div class="col s2 nextOpponent ${enemyOptions[i]}">
+            $('.nextOpponentsModel').append(`<div class="col s4 center nextOpponent ${enemyOptions[i]}">
             <div class="imgMonBox imgCharBorder ${'imgMon'+enemyOptions[i]}" data="${enemyOptions[i]}"></div>
             </div>`) 
         }
@@ -272,14 +296,11 @@ let MS_RPG = {
          * >> .gameNames
          * >> >> [YOU][SPACER][DEFENDER][SPACER][NEXT OPPONENTS AREA]
          * >> .gameModels
-         * >> >> [YOU][SPACER][[EMPTY<emptyatm>]][SPACER][[MON1][MON2][MON3]]
-         * >> .rowHealthBar
-         * >> >> [YOU]
+         * >> >> [.charModel][.spacerModel][.defModel][.spacerModel][.nextOpponentsModel]
+         * >> >> [YOU]                    [EMPTY<emptyatm>]         [[MON1][MON2][MON3]..]
+         * >> >> [Health]                 [Health]
          */
-        $('.gameScreen').append(`<div class="col s12 rowHealthbar">
-        </div>
-        `)
-        $('.rowHealthbar').append(`<div class="col s2 center">
+        $('.charModel').append(`<div class="col s12 rowHealth">
             <div class="health-bar">
                 <div class="health-bar-glass">
                     <div class="health-bar-fluid ${this.charSelected}"></div>
@@ -288,26 +309,18 @@ let MS_RPG = {
         </div>`)
 
 
-        // creates character health bar and character stats
         /**
          * .gameScreen
          * >> .gameNames
          * >> >> [YOU][SPACER][DEFENDER][SPACER][NEXT OPPONENTS AREA]
          * >> .gameModels
-         * >> >> [YOU][SPACER][[DEFENDER<emptyatm>]][SPACER][[MON1][MON2][MON3]]
-         * >> .rowHealthBar
-         * >> >> [YOU]
-         * >> .RowStats
-         * >> >> .charStats
-         * >> >> .spacer
-         * >> >> .defStats
+         * >> >> [.charModel][.spacerModel][.defModel][.spacerModel][.nextOpponentsModel]
+         * >> >> [YOU]                    [EMPTY<emptyatm>]         [[MON1][MON2][MON3]..]
+         * >> >> [health-bar]                 
+         * >> >> [charStats]
          */
-        $('.gameScreen').append(`
-        <div class="col s12 rowStats">
-            <div class="col s2 charStats"></div>
-            <div class="col s1 spacer"></div>
-            <div class="col s2 defStats"></div>
-        </div>
+        $('.charModel').append(`
+            <div class="col s12 charStats"></div>
         `)
 
         /**
@@ -315,14 +328,14 @@ let MS_RPG = {
          * >> .gameNames
          * >> >> [YOU][SPACER][DEFENDER][SPACER][NEXT OPPONENTS AREA]
          * >> .gameModels
-         * >> >> [YOU][SPACER][[DEFENDER<emptyatm>]][SPACER][[MON1][MON2][MON3]]
-         * >> .rowHealthBar
-         * >> >> [YOU]
-         * >> .RowStats
-         * >> >> .charStats
-         * >> >> >> [HP][ATK][CATK][RATK]
-         * >> >> .spacer
-         * >> >> .defStats
+         * >> >> [.charModel][.spacerModel][.defModel][.spacerModel][.nextOpponentsModel]
+         * >> >> [YOU]                    [EMPTY<emptyatm>]         [[MON1][MON2][MON3]..]
+         * >> >> [health-bar]                 
+         * >> >> [charStats]
+         * >> >> >> HP
+         * >> >> >> ATK
+         * >> >> >> CATK (not used)
+         * >> >> >> RATK
          */
         this.updateCharStats()
         this.selectDefenderLoop()
@@ -349,14 +362,14 @@ let MS_RPG = {
          * >> .gameNames
          * >> >> [YOU][SPACER][DEFENDER][SPACER][NEXT OPPONENTS AREA]
          * >> .gameModels
-         * >> >> [YOU][SPACER][[DEFENDER<MON1>]][SPACER][[MON2][MON3]]
-         * >> .rowHealthBar
-         * >> >> [YOU]
-         * >> .RowStats
-         * >> >> .charStats
-         * >> >> >> [HP][ATK][CATK][RATK]
-         * >> >> .spacer
-         * >> >> .defStats
+         * >> >> [.charModel][.spacerModel][.defModel][.spacerModel][.nextOpponentsModel]
+         * >> >> [YOU]                 [MON1<not empty now>]        [[MON2][MON3]..]
+         * >> >> [health-bar]             
+         * >> >> [charStats]
+         * >> >> >> HP
+         * >> >> >> ATK
+         * >> >> >> CATK (not used)
+         * >> >> >> RATK
          */
         //removes selected monster and puts it on defender area
         $(`.imgMon${str}`).clone().appendTo('.defenderModel')
@@ -376,6 +389,14 @@ let MS_RPG = {
                 this.defSelected = 'Balrog'
                 this.defStats = Balrog
                 break
+            case 'rSnail':
+                this.defSelected = 'rSnail'
+                this.defStats = rSnail
+                break
+            case 'bSnail':
+                this.defSelected = 'bSnail'
+                this.defStats = bSnail
+                break
         }
         this.defCurrentHealth = this.defStats.health
         if(this.aFlag === 0){
@@ -385,50 +406,52 @@ let MS_RPG = {
              * >> .gameNames
              * >> >> [YOU][SPACER][DEFENDER][SPACER][NEXT OPPONENTS AREA]
              * >> .gameModels
-             * >> >> [YOU][SPACER][[DEFENDER<MON1>]][SPACER][[MON2][MON3]]
-             * >> .rowHealthBar
-             * >> >> [YOU][SPACER][DEFENDER]
-             * >> .RowStats
-             * >> >> .charStats
-             * >> >> >> [HP][ATK][CATK][RATK]
-             * >> >> .spacer
-             * >> >> .defStats
+             * >> >> [.charModel][.spacerModel][.defModel][.spacerModel][.nextOpponentsModel]
+             * >> >> [YOU]                  [MON1<not empty now>]       [[MON2][MON3]..]
+             * >> >> [health-bar]           [health-bar]      
+             * >> >> [charStats]
+             * >> >> >> HP
+             * >> >> >> ATK
+             * >> >> >> CATK (not used)
+             * >> >> >> RATK
              */
-            $('.rowHealthbar').append(`
-                <div class="col s1 spacer"></div>
-                <div class="col s2 center">
+            $('.defModel').append(`
+                <div class="col s12">
                     <div class="health-bar">
                         <div class="health-bar-glass">
-                            <div class="health-bar-fluid defenderHealth"></div>
+                            <div class="health-bar-fluid ${this.defSelected}"></div>
                         </div>
                     </div>
                 </div>
             `)
-        }
-        $('.health-bar-fluid.defenderHealth').addClass(`${this.defSelected}`)
-        // adds the defender stats
-        /**
-         * .gameScreen
-         * >> .gameNames
-         * >> >> [YOU][SPACER][DEFENDER][SPACER][NEXT OPPONENTS AREA]
-         * >> .gameModels
-         * >> >> [YOU][SPACER][[DEFENDER<MON1>]][SPACER][[MON2][MON3]]
-         * >> .rowHealthBar
-         * >> >> [YOU][SPACER][DEFENDER]
-         * >> .RowStats
-         * >> >> .charStats
-         * >> >> >> [HP][ATK][CATK][RATK]
-         * >> >> .spacer
-         * >> >> .defStats
-         * >> >> >> [HP][CATK]
-         */
-        this.updateDefStats()
-        this.updateDefHp()
 
-        //removes border around next opponent area
+            // adds the defender stats
+            /**
+             * .gameScreen
+             * >> .gameNames
+             * >> >> [YOU][SPACER][DEFENDER][SPACER][NEXT OPPONENTS AREA]
+             * >> .gameModels
+             * >> >> [.charModel][.spacerModel][.defModel][.spacerModel][.nextOpponentsModel]
+             * >> >> [YOU]                  [MON1<not empty now>]       [[MON2][MON3]..]
+             * >> >> [health-bar]           [health-bar]      
+             * >> >> [charStats]            [defStats]
+             * >> >> >> HP
+             * >> >> >> ATK
+             * >> >> >> CATK (not used)
+             * >> >> >> RATK
+             */
+            $('.defModel').append(`
+            <div class="col s12 defStats"></div>
+            `)
+        }
+
+        this.updateDefStats()
+        this.updateDefHp() //used to update new monsters to attack, so hp is not 0
+
+        //removes border around next opponent area, to take emphasis less on it and more on defender
         $(`.nextOpponent .imgMonBox`).removeClass('imgCharBorder')
 
-        //trigger fighting between char and defender
+        //trigger fighting between char and defender by updating announcement and fightDefenderScreen()
         this.updateAnnouncement(`Click on the ${str} to Attack`)
         this.phase++
         this.fightDefenderScreen(str)
