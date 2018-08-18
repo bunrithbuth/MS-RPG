@@ -200,7 +200,7 @@ body {
     background-image: url("../images/monsters/Balrog.png");
 }
 /* snail */
-.imgMonSnail {
+.imgMonrSnail {
     background-image: url("../images/monsters/rSnail.png");
 }
 /* bsnail */
@@ -214,4 +214,8 @@ body {
 /* drake */
 .imgMonLupin {
     background-image: url("../images/monsters/Lupin.png");
+}
+/* drake */
+.imgMonflyingFishSlime {
+    background-image: url("../images/monsters/flyingFishSlime.png");
 }

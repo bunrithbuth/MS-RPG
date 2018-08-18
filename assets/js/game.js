@@ -32,7 +32,7 @@ let Warrior = {
 let characterOptions = ['Warrior', 'Bowman', 'Magician', 'Thief']
 
 //monsters
-let enemyOptions = ['Lupin','Drake','Balrog','Snail', 'bSnail']
+let enemyOptions = ['Lupin','Drake','Balrog','rSnail', 'bSnail', 'flyingFishSlime']
 let enemyCount = enemyOptions.length
 
 let Lupin =  {
@@ -60,20 +60,13 @@ let bSnail = {
     counter: 1
 }
 
-/** 
-let currentHealth = 100;
-$(".health-bar").click(function(){
-    let nextHealth = (currentHealth - 10)
-    let newWidth = nextHealth + '%'
-    $(".health-bar-fluid").animate({ width: `${newWidth}`});
-    currentHealth = nextHealth
-});
-**/
+let flyingFishSlime = {
+    health: 150,
+    counter: 6
+}
 
 /** start game */
 let MS_RPG = {
-    gameEnd: 0,
-
     charSelected: "none",
     charStats: "none",
     charCurrentHealth: 0,
@@ -88,18 +81,59 @@ let MS_RPG = {
 
     phase: 0,
     aFlag: 0,
-    newMon: 0,
     // phase 0 = choose character
     // phase 1 = choose defender
     // phase 2 = battle defender
     // repeat phase 1 and 2 until no defender or player is dead
 
+    //aFlag just creates new html, aFlag = 1 means all html created, triggered when we select a defender
+
     /** FUNCTIONS */
 
-    // displays character infos
+    /* initializes game container and game status' */
+    init: function (){
+        console.log("starting game..")
+
+        this.charSelected = "none"
+        this.charStats = "none"
+        this.charCurrentHealth = 0
+        this.charCurrentAtk = 0
+
+        this.maxEnemyCount = enemyCount
+        this.currEnemyCount = 0
+
+        this.defSelected = "none"
+        this.defStats = "none"
+        this.defCurrentHealth = 0
+
+        this.phase = 0
+        this.aFlag = 0
+
+        $('body').prepend(`
+        <div class="body">
+            <div class="container">
+                <div class="row">
+                    <div class="col s12 center title">
+                        <h2>MapleStory RPG<span><img src="assets/images/MapleStory_Logo.png" class="mslogo"></span></h2>
+                    </div>
+                    <div class="col s12 center announcementBanner">
+                    </div>
+                    <div class="col s12 gameScreen">
+                            
+                    </div>
+                </div>
+            </div>
+        </div>
+        `)
+
+        this.selectCharacterScreen()
+    },
+
+    //creates the character selection screen
     selectCharacterScreen: function () {
         this.updateAnnouncement('Select a Character')
 
+        // displays each class on the screen only 4. if adding more than 4, recreate the whole grid for this
         for (let i =0; i < characterOptions.length; i++) {
             switch (characterOptions[i]) {
                 case 'Warrior':
@@ -125,12 +159,14 @@ let MS_RPG = {
             }
         }
 
+        // displays each (4) character images
         for (let i =0; i < characterOptions.length; i++) {
             $('.gameScreen').append(`<div class="col s3">
             <div class="imgCharBox imgCharBorder ${'imgChar'+characterOptions[i]} ${'active'+characterOptions[i]}" data="${characterOptions[i]}"></div>
             </div>`)
         }
     
+        // displays each (4) character stats
         for (let i =0; i < characterOptions.length; i++) {
             switch (characterOptions[i]) {
                 case 'Warrior':
@@ -167,20 +203,9 @@ let MS_RPG = {
                     break
             }
         }
-        /** CAN CLICK ON CHAR HERE */
-        if (MS_RPG.phase === 0) {
-            $(document).ready(function() {
-                $('.imgCharBox').on("click", function() {
-                        //choose character
-                    if (MS_RPG.phase === 0) {
-                        MS_RPG.selectedCharacter($(this).attr("data"))
-                    }
-                })
-            })
-        }
-        /** END */
     },
-    // updates RPG with character selected
+
+    // updates the game with selected character after uses chooses
     selectedCharacter: function (str) {
         this.phase++ //phase 1, cannnot choose another character
         this.updateAnnouncement('You Haven Chosen ' + str)
@@ -207,6 +232,8 @@ let MS_RPG = {
 
         this.gameScreenInit()       
     },
+
+    //creates the 'battlefield' and initializes enemy count
     gameScreenInit: function () {
         $('.gameScreen').empty()
         this.currEnemyCount = this.maxEnemyCount
@@ -344,16 +371,6 @@ let MS_RPG = {
     selectDefenderLoop: function () {
         $('.defModel .health-bar-fluid').removeClass(`${this.defSelected}`)
         this.updateAnnouncement('Select Next Monster to Attack')
-        if (this.aFlag === 0) {
-            $(document).ready(function() {     
-                $('.nextOpponent .imgMonBox').on("click", function() {
-                    //choose Defender
-                    if(MS_RPG.phase === 1){
-                        MS_RPG.selectedDefenderScreen($(this).attr("data"))
-                    }
-                })    
-            })
-        }
     },
     // updates defender stats 
     selectedDefenderScreen: function (str) {
@@ -372,11 +389,12 @@ let MS_RPG = {
          * >> >> >> CATK (not used)
          * >> >> >> RATK
          */
+
         //removes selected monster and puts it on defender area
         $(`.imgMon${str}`).clone().appendTo('.defenderModel')
         $(`.nextOpponent.${str}`).remove()
 
-        //updates current defender
+        //updates current defender name and stats
         switch (str) {
             case 'Lupin':
                 this.defSelected = 'Lupin'
@@ -397,6 +415,10 @@ let MS_RPG = {
             case 'bSnail':
                 this.defSelected = 'bSnail'
                 this.defStats = bSnail
+                break
+            case 'flyingFishSlime':
+                this.defSelected = 'flyingFishSlime'
+                this.defStats = flyingFishSlime
                 break
         }
         this.defCurrentHealth = this.defStats.health
@@ -461,35 +483,11 @@ let MS_RPG = {
     },
     // fights and goes back into selectDefenderLoop if monster available or not dead yet
     fightDefenderScreen: function (str){
+        this.aFlag = 1 //just means all the html has been created, no need to create
         //if the character or defender is not dead
         if(this.charCurrentHealth > 0  && this.defCurrentHealth > 0) {
-            // gotta redeclare click due to DOM remove and ad
-            if (this.newMon === 0) {
-                this.newMon = 1
-                this.aFlag = 1
-                $(document).ready(function() {     
-                    $('.defenderModel .imgMonBox').on("click", function() {
-                        //choose Defender
-                        $(`.imgChar${MS_RPG.charSelected}`).addClass(`attack${MS_RPG.charSelected}`)
-                        // MS_RPG.fightDefenderScreen(str)
-                        setTimeout(function() {
-                            $(`.imgChar${MS_RPG.charSelected}`).removeClass(`attack${MS_RPG.charSelected}`)
-                        }, 500)
-
-                        MS_RPG.defCurrentHealth = MS_RPG.defCurrentHealth - MS_RPG.charCurrentAtk
-                        MS_RPG.charCurrentHealth = MS_RPG.charCurrentHealth - MS_RPG.defStats.counter
-                        MS_RPG.charCurrentAtk = MS_RPG.charCurrentAtk + MS_RPG.charStats.attackRaised
-
-                        MS_RPG.updateCharStats()
-                        MS_RPG.updateDefStats()
-
-                        MS_RPG.updateCharHp()
-                        MS_RPG.updateDefHp()
-
-                        MS_RPG.fightDefenderScreen()
-                    })  
-                })
-            }
+            // does nothing, keep clicking on enemy till death is triggered
+            // the fuction below does stuff when that happens
         }else if(this.charCurrentHealth > 0 && this.currEnemyCount > 0){ // you can continue fighting, also enemy hp <= 0
             this.currEnemyCount--
             $('.defenderModel').empty()
@@ -499,8 +497,7 @@ let MS_RPG = {
                 this.gameEnd()
             }else{ // more enemies to defeat
                 $(`.nextOpponent .imgMonBox`).addClass('imgCharBorder')
-                this.phase = 1
-                this.newMon = 0
+                this.phase = 1 // just means you can select new def
                 this.selectDefenderLoop()
             }
         }else if(this.charCurrentHealth <= 0){
@@ -547,19 +544,69 @@ let MS_RPG = {
         $(`.health-bar-fluid.${this.defSelected}`).css( "width", `${percent}%` );
     },
     runRPG: function () {
-        this.selectCharacterScreen()
+        this.init()
     },
     gameEnd: function () {
+        let str = ''
         if(this.charCurrentHealth <= 0){
-            this.updateAnnouncement('YOU LOSE!')
+            str = 'YOU LOSE!'
         }else{
-            this.updateAnnouncement('YOU WIN!')
+            str = 'YOU WIN!'
         }
+        this.updateAnnouncement(str)
+        let r
+        setTimeout(function() {
+            r = confirm("Would you like to play again?")
+        }, 500)
+        if (r === true) {
+            this.reset()
+        }
+    },
+    reset: function () {
+        $('.body').remove()
+        this.reset++
+        this.init()
     }
 }
 
+// NOTE: i can use this instead of MS_RPG but didnt want it to look confusing
 $(document).ready(function() {
+    //used to select a char from character selection screen
+    $(document).on("click",'.imgCharBox', function() {
+            //choose character
+        if (MS_RPG.phase === 0) {
+            MS_RPG.selectedCharacter($(this).attr("data"))
+        }
+    })
+    //used to select a defender from next opponent area
+    $(document).on("click",'.nextOpponent .imgMonBox', function() {
+        //choose Defender
+        if(MS_RPG.phase === 1){
+            MS_RPG.selectedDefenderScreen($(this).attr("data"))
+        }
+    })   
+    //used to attack defender
+    $(document).on("click",'.defenderModel .imgMonBox', function() {
+        //add attack animation class
+        $(`.imgChar${MS_RPG.charSelected}`).addClass(`attack${MS_RPG.charSelected}`)
+        // set timeout to remove attack animation class after attack animation
+        setTimeout(function() {
+            $(`.imgChar${MS_RPG.charSelected}`).removeClass(`attack${MS_RPG.charSelected}`)
+        }, 500)
 
+        MS_RPG.defCurrentHealth = MS_RPG.defCurrentHealth - MS_RPG.charCurrentAtk
+        MS_RPG.charCurrentHealth = MS_RPG.charCurrentHealth - MS_RPG.defStats.counter
+        MS_RPG.charCurrentAtk = MS_RPG.charCurrentAtk + MS_RPG.charStats.attackRaised
+
+        MS_RPG.updateCharStats()
+        MS_RPG.updateDefStats()
+
+        MS_RPG.updateCharHp()
+        MS_RPG.updateDefHp()
+
+        MS_RPG.fightDefenderScreen()
+    })
+    //running game on page load
     MS_RPG.runRPG()
     
 })
