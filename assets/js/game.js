@@ -342,6 +342,7 @@ let MS_RPG = {
     },
     // on click for nextOpponent 
     selectDefenderLoop: function () {
+        $('.defModel .health-bar-fluid').removeClass(`${this.defSelected}`)
         this.updateAnnouncement('Select Next Monster to Attack')
         if (this.aFlag === 0) {
             $(document).ready(function() {     
@@ -419,7 +420,7 @@ let MS_RPG = {
                 <div class="col s12">
                     <div class="health-bar">
                         <div class="health-bar-glass">
-                            <div class="health-bar-fluid ${this.defSelected}"></div>
+                            <div class="health-bar-fluid"></div>
                         </div>
                     </div>
                 </div>
@@ -444,6 +445,8 @@ let MS_RPG = {
             <div class="col s12 defStats"></div>
             `)
         }
+
+        $('.defModel .health-bar-fluid').addClass(`${this.defSelected}`)
 
         this.updateDefStats()
         this.updateDefHp() //used to update new monsters to attack, so hp is not 0
@@ -471,7 +474,7 @@ let MS_RPG = {
                         // MS_RPG.fightDefenderScreen(str)
                         setTimeout(function() {
                             $(`.imgChar${MS_RPG.charSelected}`).removeClass(`attack${MS_RPG.charSelected}`)
-                        }, 5000)
+                        }, 500)
 
                         MS_RPG.defCurrentHealth = MS_RPG.defCurrentHealth - MS_RPG.charCurrentAtk
                         MS_RPG.charCurrentHealth = MS_RPG.charCurrentHealth - MS_RPG.defStats.counter
