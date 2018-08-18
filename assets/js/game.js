@@ -47,7 +47,7 @@ let Drake = {
 
 let Balrog = {
     health: 200,
-    counter: 8
+    counter: 10
 }
 
 
@@ -448,7 +448,7 @@ let MS_RPG = {
                         // MS_RPG.fightDefenderScreen(str)
                         setTimeout(function() {
                             $(`.imgChar${MS_RPG.charSelected}`).removeClass(`attack${MS_RPG.charSelected}`)
-                        }, 500)
+                        }, 5000)
 
                         MS_RPG.defCurrentHealth = MS_RPG.defCurrentHealth - MS_RPG.charCurrentAtk
                         MS_RPG.charCurrentHealth = MS_RPG.charCurrentHealth - MS_RPG.defStats.counter
@@ -464,19 +464,23 @@ let MS_RPG = {
                     })  
                 })
             }
-        }else if(MS_RPG.charCurrentHealth > 0 && enemyCount > 0){ // you can continue fighting, also enemy hp <= 0
+        }else if(this.charCurrentHealth > 0 && this.currEnemyCount > 0){ // you can continue fighting, also enemy hp <= 0
             this.currEnemyCount--
             $('.defenderModel').empty()
             $('.health-bar-fluid.defenderHealth').removeClass(`${this.defSelected}`)
             // last monster is just defeated
             if(this.currEnemyCount === 0){
-                MS_RPG.gameEnd()
+                this.gameEnd()
             }else{ // more enemies to defeat
                 $(`.nextOpponent .imgMonBox`).addClass('imgCharBorder')
                 this.phase = 1
                 this.newMon = 0
                 this.selectDefenderLoop()
             }
+        }else if(this.charCurrentHealth <= 0){
+            $('.defenderModel').empty()
+            console.log("HERE")
+            this.gameEnd()
         }
     },
     updateAnnouncement: function (str) {
@@ -520,7 +524,11 @@ let MS_RPG = {
         this.selectCharacterScreen()
     },
     gameEnd: function () {
-        this.updateAnnouncement('YOU WIN!')
+        if(this.charCurrentHealth <= 0){
+            this.updateAnnouncement('YOU LOSE!')
+        }else{
+            this.updateAnnouncement('YOU WIN!')
+        }
     }
 }
 
