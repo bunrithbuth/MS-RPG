@@ -557,14 +557,14 @@ let MS_RPG = {
         let r
         setTimeout(function() {
             r = confirm("Would you like to play again?")
+            if (r === true) {
+                MS_RPG.reset()
+            }
         }, 500)
-        if (r === true) {
-            this.reset()
-        }
     },
     reset: function () {
+        console.log('resetting game...')
         $('.body').remove()
-        this.reset++
         this.init()
     }
 }
